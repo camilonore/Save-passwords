@@ -1,10 +1,5 @@
-from openpyxl import load_workbook
-import pandas as pd
 import random
 import argparse
-
-###########################################################################
-
 
 __author__ = "Shangru Li"
 __copyright__ = "Copyright 2021, Shangru Li"
@@ -168,67 +163,3 @@ def decrypt(text_to_decrypt: str, is_seed: bool = False) -> str:
     except:
         raise SyntaxError(
             "Decryption failed, please make sure the encrypted text is correct.")
-
-###########################################################################
-
-
-class Functions:
-    def __init__(self, function, domain, email='None', password='None', newpassword=None) -> None:
-        self.newpassword = newpassword
-        self.function = function
-        self.domain = domain
-        self.email = email
-        self.password = password
-        self.wb = load_workbook('Password.xlsx')
-        self.ws = self.wb.active
-        self.ws.tittle = 'Passwords'
-        self.counter = self.ws['F1'].value
-        if self.function == 'add':
-            self.AddData()
-        elif self.function == 'delete':
-            self.DeleteData()
-        elif self.function == 'change':
-            self.ChangePass(self.domain, self.newpassword)
-
-    def AddData(self):
-        # Asign values
-        self.ws['A'+str(self.counter)].value = self.domain
-        self.ws['B'+str(self.counter)].value = encrypt(self.email)
-        self.ws['C'+str(self.counter)].value = encrypt(self.password)
-        # Increasing counter value
-        self.counter += 1
-        # Asign the new counter value
-        self.ws['F1'].value = self.counter
-        self.wb.save('Password.xlsx')
-        print('Data successfully added')
-
-    def DeleteData(self):
-        DomainPositioin = self.LookFor(self.domain, self.counter)
-        self.ws.delete_rows(DomainPositioin)
-        self.wb.save('Password.xlsx')
-        print('Data successfully deleted')
-
-    def KnowPassword(self, enckey):
-        PasswordPosition = 'C'+str(self.LookFor(self.domain, self.counter))
-        PasswordValue = self.ws[PasswordPosition].value
-        if enckey == '1002309109nore':
-            PasswordValue = decrypt(PasswordValue)
-            return PasswordValue
-
-    def ChangePass(self, domain, newpassword):
-        print(newpassword)
-        PasswordPosition = 'C'+str(self.LookFor(domain, self.counter))
-        self.ws[PasswordPosition] = encrypt(newpassword)
-        self.wb.save('Password.xlsx')
-        print('Password successfully changed')
-
-    def LookFor(self, domain, counter):
-        for i in range(0, counter):
-            df = pd.read_excel(
-                "Password.xlsx", "Sheet")
-            if df.iloc[i, 0] == domain:
-                return (i+2)
-
-
-if __name__ == '__main__':
-    Functions

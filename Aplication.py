@@ -15,13 +15,13 @@ class Application(Frame):
         Label(fr1, text='What do you want to do?', bg='#40322F',
               fg='#FFF').pack(padx=100, pady=10)
         Button(fr1, text='Delete a password', fg='#FFF',
-               bg='red', command=lambda: self.DomainFunction('delete')).pack(ipadx=95, pady=10)
+               bg='red', command=lambda: self.deleteFunction('delete')).pack(ipadx=95, pady=10)
         Button(fr1, text='Add a password', fg='#FFF',
                bg='green', command=lambda: self.addFunction('add')).pack(ipadx=100, pady=10)
         Button(fr1, text='Know your save password',
                fg='#000', bg='yellow', command=lambda: self.knowPassword('know')).pack(ipadx=75, pady=10)
         Button(fr1, text='Change your password', fg='#000',
-               bg='orange', command=lambda: self.DomainFunction('change')).pack(ipadx=85, pady=10)
+               bg='orange', command=lambda: self.changeButton('change')).pack(ipadx=85, pady=10)
         Button(fr1, text='Quit', fg='white', bg='red',
                          command=self.master.destroy).pack(ipadx=75, pady=100)
 
@@ -82,6 +82,46 @@ class Application(Frame):
                          command=self.master.destroy, fg='white', bg='red')
         quitbtn.pack(pady=80, ipadx=70)
 
+    def changeButton(self, function):
+        def doneButtonDelete():
+            Functions(self.function, self.domain.get(),
+                      None, None, self.newpassword.get())
+            self.domain.delete(0, 'end')
+            self.newpassword.delete(0, 'end')
+            fr1 = Frame(self, bg='#40322F')
+            fr1.place(x=-10, y=50)
+            lbl1 = Label(fr1, text='Password changed successfully',
+                         bg='#40322F', fg='green')
+            lbl1.pack(padx=145, pady=20, ipadx=5)
+        self.function = function
+        fr1 = Frame(self, bg='#40322F')
+        fr1.place(x=-10, y=50)
+        lbl1 = Label(fr1, text='Write the domain name',
+                     bg='#40322F', fg='#FFF')
+        lbl1.pack()
+        self.domain = Entry(fr1)
+        self.domain.pack(padx=80, pady=5, ipadx=80, ipady=5)
+        lbl2 = Label(fr1, text='Write your new password',
+                     bg='#40322F', fg='#FFF')
+        lbl2.pack()
+        self.newpassword = Entry(fr1)
+        self.newpassword.pack(padx=80, pady=10, ipadx=80, ipady=5)
+        donebtn = Button(fr1, text='Done!',
+                         command=doneButtonDelete, fg='white', bg='green')
+        donebtn.pack(padx=80, pady=5, ipadx=60, ipady=5)
+        self.buttons(fr1, 95, 'doneButtonDelete')
+
+    def deleteFunction(self, function):
+        fr1 = Frame(self, bg='#40322F')
+        fr1.place(x=-10, y=50)
+        lbl1 = Label(fr1, text='Write the domain name',
+                     bg='#40322F', fg='#FFF')
+        lbl1.pack()
+        self.domain = Entry(fr1)
+        self.domain.pack(padx=80, pady=5, ipadx=80, ipady=5)
+        self.function = function
+        self.buttons(fr1)
+
     def doneButton(self):
         self.prueba = 'prueba'
         if self.function == 'add':
@@ -108,24 +148,20 @@ class Application(Frame):
             quitbtn = Button(frame, text='Quit',
                              command=self.master.destroy, fg='white', bg='red')
             quitbtn.pack(pady=pady, ipadx=70)
-        else:
+        elif name == 'doneButtonKnow':
             returnbtn = Button(frame, text='Return',
                                command=lambda: self.knowPassword('know'), fg='black', bg='yellow')
             returnbtn.pack(padx=80, pady=20, ipadx=55, ipady=5)
             quitbtn = Button(frame, text='Quit',
                              command=self.master.destroy, fg='white', bg='red')
             quitbtn.pack(pady=40, ipadx=80)
-
-    def DomainFunction(self, function):
-        fr1 = Frame(self, bg='#40322F')
-        fr1.place(x=-10, y=50)
-        lbl1 = Label(fr1, text='Write the domain name',
-                     bg='#40322F', fg='#FFF')
-        lbl1.pack()
-        self.domain = Entry(fr1)
-        self.domain.pack(padx=80, pady=5, ipadx=80, ipady=5)
-        self.function = function
-        self.buttons(fr1)
+        elif name == 'doneButtonDelete':
+            returnbtn = Button(frame, text='Return',
+                               command=self.createMain, fg='black', bg='yellow')
+            returnbtn.pack(padx=80, pady=20, ipadx=55, ipady=5)
+            quitbtn = Button(frame, text='Quit',
+                             command=self.master.destroy, fg='white', bg='red')
+            quitbtn.pack(pady=pady, ipadx=70)
 
 
 if __name__ == '__main__':

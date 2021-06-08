@@ -8,4 +8,5 @@ app = Application(master=root)
 app.mainloop()
 
 
-# Agregar cambiar la contraseña
+# Arreglar el frontend, en borrar contraseña falta mostrar que se borro la contraseña
+# y borrar los print de consola
