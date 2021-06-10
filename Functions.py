@@ -3,7 +3,7 @@ import pandas as pd
 import random
 import argparse
 
-###########################################################################
+#########################__Crypt_and_decrypt__##################################
 
 
 __author__ = "Shangru Li"
@@ -179,10 +179,13 @@ class Functions:
         self.domain = domain
         self.email = email
         self.password = password
+# Cargar el libro .xlsx
         self.wb = load_workbook('Password.xlsx')
         self.ws = self.wb.active
         self.ws.tittle = 'Passwords'
+# Leer el contador asignado en el libro .xlsx
         self.counter = self.ws['F1'].value
+# Seleccion del metodo que se va a usar
         if self.function == 'add':
             self.AddData()
         elif self.function == 'delete':
@@ -190,6 +193,7 @@ class Functions:
         elif self.function == 'change':
             self.ChangePass(self.domain, self.newpassword)
 
+# Funcionalidad para añadir una contraseña
     def AddData(self):
         # Asign values
         self.ws['A'+str(self.counter)].value = self.domain
@@ -199,34 +203,48 @@ class Functions:
         self.counter += 1
         # Asign the new counter value
         self.ws['F1'].value = self.counter
+        # Save the book
         self.wb.save('Password.xlsx')
-        print('Data successfully added')
 
+# Funcionalidad para borra contraseña
     def DeleteData(self):
+        # Ejecutar el metodo LookFor para buscar la posicion del dominio
         DomainPositioin = self.LookFor(self.domain, self.counter)
+        # Borrando los datos
         self.ws.delete_rows(DomainPositioin)
+        # Save the book
         self.wb.save('Password.xlsx')
-        print('Data successfully deleted')
 
+# Funcionalidad para conocer una contraseña
     def KnowPassword(self, enckey):
+        # Ejecutar el metodo LookFor para buscar la posicion de la contraseña
         PasswordPosition = 'C'+str(self.LookFor(self.domain, self.counter))
+        # Encontrar el valor de la contraseña
         PasswordValue = self.ws[PasswordPosition].value
+        # Verificacion de la contraseña
+        # Enckey == 'valor asignado como contraseña privada'
         if enckey == '1002309109nore':
             PasswordValue = decrypt(PasswordValue)
             return PasswordValue
 
+# Funcionalidad para cambiar una contraseña
     def ChangePass(self, domain, newpassword):
-        print(newpassword)
+        # Ejecutar el metodo LookFor para buscar la posicion de la contraseña
         PasswordPosition = 'C'+str(self.LookFor(domain, self.counter))
+        # Asignando el nuevo valor a la contraseña
         self.ws[PasswordPosition] = encrypt(newpassword)
+        # Save the book
         self.wb.save('Password.xlsx')
-        print('Password successfully changed')
 
+# Funcionalidad para buscar contraseñas guardadas en el archivo xlsx
     def LookFor(self, domain, counter):
+        # Determinar un limite de busqueda en el libro con counter
         for i in range(0, counter):
             df = pd.read_excel(
                 "Password.xlsx", "Sheet")
+            # Buscar si el nombre en la posicion es igual al dominio ingresado
             if df.iloc[i, 0] == domain:
+                # Devolver la posicion en la que el dominio se encuentra
                 return (i+2)
 
 
