@@ -172,6 +172,10 @@ def decrypt(text_to_decrypt: str, is_seed: bool = False) -> str:
 ###########################################################################
 
 
+book = 'Python\Tkinter\Password.xlsx'
+private_key = 'camilonore11'
+
+
 class Functions:
     def __init__(self, function, domain, email='None', password='None', newpassword=None) -> None:
         self.newpassword = newpassword
@@ -180,7 +184,7 @@ class Functions:
         self.email = email
         self.password = password
 # Cargar el libro .xlsx
-        self.wb = load_workbook('Password.xlsx')
+        self.wb = load_workbook(book)
         self.ws = self.wb.active
         self.ws.tittle = 'Passwords'
 # Leer el contador asignado en el libro .xlsx
@@ -204,7 +208,7 @@ class Functions:
         # Asign the new counter value
         self.ws['F1'].value = self.counter
         # Save the book
-        self.wb.save('Password.xlsx')
+        self.wb.save(book)
 
 # Funcionalidad para borra contraseña
     def DeleteData(self):
@@ -213,7 +217,7 @@ class Functions:
         # Borrando los datos
         self.ws.delete_rows(DomainPositioin)
         # Save the book
-        self.wb.save('Password.xlsx')
+        self.wb.save(book)
 
 # Funcionalidad para conocer una contraseña
     def KnowPassword(self, enckey):
@@ -222,8 +226,8 @@ class Functions:
         # Encontrar el valor de la contraseña
         PasswordValue = self.ws[PasswordPosition].value
         # Verificacion de la contraseña
-        # Enckey == 'valor asignado como contraseña privada'
-        if enckey == '1002309109nore':
+        # comprbar la llave privada'
+        if enckey == private_key:
             PasswordValue = decrypt(PasswordValue)
             return PasswordValue
 
@@ -234,14 +238,14 @@ class Functions:
         # Asignando el nuevo valor a la contraseña
         self.ws[PasswordPosition] = encrypt(newpassword)
         # Save the book
-        self.wb.save('Password.xlsx')
+        self.wb.save(book)
 
 # Funcionalidad para buscar contraseñas guardadas en el archivo xlsx
     def LookFor(self, domain, counter):
         # Determinar un limite de busqueda en el libro con counter
         for i in range(0, counter):
             df = pd.read_excel(
-                "Password.xlsx", "Sheet")
+                book, "Sheet")
             # Buscar si el nombre en la posicion es igual al dominio ingresado
             if df.iloc[i, 0] == domain:
                 # Devolver la posicion en la que el dominio se encuentra

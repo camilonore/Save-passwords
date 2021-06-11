@@ -8,5 +8,5 @@ app = Application(master=root)
 app.mainloop()
 
 
-# Arreglar el frontend, en borrar contraseña falta mostrar que se borro la contraseña
-# y borrar los print de consola
+# Hacer el frame de que los cambios han sido exitosos
+# Hacer el frame de la primera vez, ingresar la contraseña privada
