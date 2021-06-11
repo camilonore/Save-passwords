@@ -10,7 +10,23 @@ class Application(Frame):
         super().__init__(master, width=400, height=450, bg=bg_color)
         self.master = master
         self.pack()
-        self.createMain()
+        self.privatetime = 0
+        if self.privatetime == 0:
+            self.privateKeyFrame()
+        else:
+            self.createMain()
+
+# Interfaz llave privada
+    def privateKeyFrame(self):
+        self.privatetime += 1
+        fr1 = Frame(self, bg=bg_color)
+        fr1.place(x=-10, y=20)
+        Label(fr1, text="Write your private key (Don't forget it)", bg=bg_color,
+              fg=fg_color).pack(padx=10, pady=40)
+        self.privatekeyMain = Entry(fr1, bg=bg_color, fg=fg_color,
+                                    insertbackground=fg_color)
+        self.privatekeyMain.pack(padx=80, pady=5, ipadx=80, ipady=5)
+        self.buttons(fr1, 180, 'privatekey')
 
 # Interfaz principal
     def createMain(self):
@@ -102,6 +118,7 @@ class Application(Frame):
             self.newpassword.delete(0, 'end')
             fr1 = Frame(self, bg=bg_color)
             fr1.place(x=-10, y=50)
+            self.successFrame()
         self.function = function
         fr1 = Frame(self, bg=bg_color)
         fr1.place(x=-10, y=50)
@@ -135,9 +152,12 @@ class Application(Frame):
         self.function = function
         self.buttons(fr1)
 
+
 # Funcionalidad del boton completar
-    def doneButton(self, frame):
-        if self.function == 'add':
+
+
+    def doneButton(self, function):
+        if function == 'add':
             domain = self.domain.get()
             email = self.email.get()
             password = self.password.get()
@@ -145,16 +165,24 @@ class Application(Frame):
             self.domain.delete(0, 'end')
             self.email.delete(0, 'end')
             self.password.delete(0, 'end')
+            self.successFrame()
+        elif function == 'privatekey':
+            privatekey = self.privatekeyMain.get()
+            print(privatekey)
+            self.privatekeyMain.delete(0, 'end')
+            self.createMain()
+
         else:
             domain = self.domain.get()
             Functions(self.function, domain)
             self.domain.delete(0, 'end')
+            self.successFrame()
 
 # Metodo para la creacion de botones
     def buttons(self, frame, pady=175, name=None):
         if name == None:
             donebtn = Button(frame, text='Done!',
-                             command=lambda: self.doneButton(frame), fg=fg_color, bg=bg_color)
+                             command=lambda: self.doneButton('add'), fg=fg_color, bg=bg_color)
             donebtn.pack(padx=80, pady=5, ipadx=60, ipady=5)
             returnbtn = Button(frame, text='Return',
                                command=self.createMain, fg=fg_color, bg=bg_color)
@@ -176,6 +204,21 @@ class Application(Frame):
             quitbtn = Button(frame, text='Quit',
                              command=self.master.destroy, fg=fg_color, bg=bg_color)
             quitbtn.pack(pady=pady, ipadx=70)
+        elif name == 'privatekey':
+            donebtn = Button(frame, text='Done!',
+                             command=lambda: self.doneButton(name), fg=fg_color, bg=bg_color)
+            donebtn.pack(padx=80, pady=5, ipadx=60, ipady=5)
+            quitbtn = Button(frame, text='Quit',
+                             command=self.master.destroy, fg=fg_color, bg=bg_color)
+            quitbtn.pack(pady=pady, ipadx=70)
+
+# frame de accion realizada satisfactoriamente
+    def successFrame(self):
+        fr1 = Frame(self, bg=bg_color)
+        fr1.place(x=0, y=332)
+        lbl1 = Label(fr1, text='SUCCESSFULLY',
+                     bg=bg_color, fg='#40D044')
+        lbl1.pack(padx=155, pady=20, ipadx=5)
 
 
 if __name__ == '__main__':

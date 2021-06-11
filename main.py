@@ -8,5 +8,5 @@ app = Application(master=root)
 app.mainloop()
 
 
-# Hacer el frame de que los cambios han sido exitosos
-# Hacer el frame de la primera vez, ingresar la contraseña privada
+# Añadir la funcionalidad de guardar la private key
+# Añadir el contador para que la private key solo salga una vez ( Hacerlo usando el counter )
