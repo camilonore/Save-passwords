@@ -10,8 +10,8 @@ class Application(Frame):
         super().__init__(master, width=400, height=450, bg=bg_color)
         self.master = master
         self.pack()
-        self.privatetime = 0
-        if self.privatetime == 0:
+        self.privatetime = Functions.checkprivatetime(Functions())
+        if self.privatetime == True:
             self.privateKeyFrame()
         else:
             self.createMain()
@@ -23,7 +23,7 @@ class Application(Frame):
         fr1.place(x=-10, y=20)
         Label(fr1, text="Write your private key (Don't forget it)", bg=bg_color,
               fg=fg_color).pack(padx=10, pady=40)
-        self.privatekeyMain = Entry(fr1, bg=bg_color, fg=fg_color,
+        self.privatekeyMain = Entry(fr1, bg=bg_color, fg=fg_color, show='*',
                                     insertbackground=fg_color)
         self.privatekeyMain.pack(padx=80, pady=5, ipadx=80, ipady=5)
         self.buttons(fr1, 180, 'privatekey')
@@ -62,7 +62,7 @@ class Application(Frame):
         self.email.pack(padx=80, pady=5, ipadx=80, ipady=5)
         lbl3 = Label(fr1, text='Write the password', bg=bg_color, fg=fg_color)
         lbl3.pack()
-        self.password = Entry(fr1, bg=bg_color, fg=fg_color,
+        self.password = Entry(fr1, bg=bg_color, fg=fg_color, show='*',
                               insertbackground=fg_color)
         self.password.pack(padx=80, pady=5, ipadx=80, ipady=5)
         self.buttons(fr1, 50)
@@ -78,7 +78,7 @@ class Application(Frame):
             fr1 = Frame(self, bg=bg_color)
             fr1.place(x=-10, y=50)
             lbl1 = Label(fr1, text='Your password is:',
-                         bg=bg_color, fg=fg_color)
+                         bg=bg_color, fg='#FFF')
             lbl1.pack(padx=155, pady=20, ipadx=5)
             lbl2 = Label(fr1, text=knowPasswordHowto,
                          bg=bg_color, fg=fg_color)
@@ -132,7 +132,7 @@ class Application(Frame):
                      bg=bg_color, fg=fg_color)
         lbl2.pack()
         self.newpassword = Entry(
-            fr1, bg=bg_color, fg=fg_color, insertbackground=fg_color)
+            fr1, bg=bg_color, fg=fg_color, show='*', insertbackground=fg_color)
         self.newpassword.pack(padx=80, pady=10, ipadx=80, ipady=5)
         donebtn = Button(fr1, text='Done!',
                          command=doneButtonDelete, fg=fg_color, bg=bg_color)
@@ -161,14 +161,14 @@ class Application(Frame):
             domain = self.domain.get()
             email = self.email.get()
             password = self.password.get()
-            Functions(self.function, domain, email, password)
+            Functions(function, domain, email, password)
             self.domain.delete(0, 'end')
             self.email.delete(0, 'end')
             self.password.delete(0, 'end')
             self.successFrame()
         elif function == 'privatekey':
             privatekey = self.privatekeyMain.get()
-            print(privatekey)
+            Functions(function, None, None, None, None, privatekey)
             self.privatekeyMain.delete(0, 'end')
             self.createMain()
 
@@ -192,7 +192,7 @@ class Application(Frame):
             quitbtn.pack(pady=pady, ipadx=70)
         elif name == 'doneButtonKnow':
             returnbtn = Button(frame, text='Return',
-                               command=lambda: self.knowPassword('know'), fg=fg_color, bg='yellow')
+                               command=lambda: self.knowPassword('know'), fg=fg_color, bg=bg_color)
             returnbtn.pack(padx=80, pady=20, ipadx=55, ipady=5)
             quitbtn = Button(frame, text='Quit',
                              command=self.master.destroy, fg=fg_color, bg=bg_color)

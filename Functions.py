@@ -173,31 +173,50 @@ def decrypt(text_to_decrypt: str, is_seed: bool = False) -> str:
 
 
 book = 'Python\Tkinter\Password.xlsx'
-private_key = 'camilonore11'
 
 
 class Functions:
-    def __init__(self, function, domain, email='None', password='None', newpassword=None) -> None:
+    def __init__(self, function=None, domain='None', email='None', password='None', newpassword=None, privatekey=None) -> None:
         self.newpassword = newpassword
+        self.privateKey = privatekey
         self.function = function
         self.domain = domain
         self.email = email
         self.password = password
-# Cargar el libro .xlsx
+        # Cargar el libro .xlsx
         self.wb = load_workbook(book)
         self.ws = self.wb.active
         self.ws.tittle = 'Passwords'
-# Leer el contador asignado en el libro .xlsx
+        # Leer el contador asignado en el libro .xlsx
         self.counter = self.ws['F1'].value
-# Seleccion del metodo que se va a usar
+        # Seleccion del metodo que se va a usar
         if self.function == 'add':
             self.AddData()
         elif self.function == 'delete':
             self.DeleteData()
         elif self.function == 'change':
             self.ChangePass(self.domain, self.newpassword)
+        elif self.function == 'privatekey':
+            self.privateKeyFunct()
 
-# Funcionalidad para añadir una contraseña
+    # Metodo comprobacion de asignacion de la llave privada
+    def checkprivatetime(self):
+        if self.ws['F1'].value == 2:
+            self.counter += 1
+            # Asign the new counter value
+            self.ws['F1'].value = self.counter
+            # Save the book
+            self.wb.save(book)
+            return True
+
+    # Metodo llave privada
+    def privateKeyFunct(self):
+        # Guardar el valor de la llave privada
+        self.ws['F2'].value = encrypt(self.privateKey)
+        # Guardar el libro
+        self.wb.save(book)
+
+    # Funcionalidad para añadir una contraseña
     def AddData(self):
         # Asign values
         self.ws['A'+str(self.counter)].value = self.domain
@@ -210,7 +229,7 @@ class Functions:
         # Save the book
         self.wb.save(book)
 
-# Funcionalidad para borra contraseña
+    # Funcionalidad para borra contraseña
     def DeleteData(self):
         # Ejecutar el metodo LookFor para buscar la posicion del dominio
         DomainPositioin = self.LookFor(self.domain, self.counter)
@@ -219,19 +238,21 @@ class Functions:
         # Save the book
         self.wb.save(book)
 
-# Funcionalidad para conocer una contraseña
+    # Funcionalidad para conocer una contraseña
     def KnowPassword(self, enckey):
         # Ejecutar el metodo LookFor para buscar la posicion de la contraseña
         PasswordPosition = 'C'+str(self.LookFor(self.domain, self.counter))
         # Encontrar el valor de la contraseña
         PasswordValue = self.ws[PasswordPosition].value
         # Verificacion de la contraseña
-        # comprbar la llave privada'
-        if enckey == private_key:
+        # comprbar la llave privada
+        if enckey == decrypt(self.ws['F2'].value):
             PasswordValue = decrypt(PasswordValue)
             return PasswordValue
+        else:
+            return 'Wrong private key!!'
 
-# Funcionalidad para cambiar una contraseña
+    # Funcionalidad para cambiar una contraseña
     def ChangePass(self, domain, newpassword):
         # Ejecutar el metodo LookFor para buscar la posicion de la contraseña
         PasswordPosition = 'C'+str(self.LookFor(domain, self.counter))
@@ -240,7 +261,7 @@ class Functions:
         # Save the book
         self.wb.save(book)
 
-# Funcionalidad para buscar contraseñas guardadas en el archivo xlsx
+    # Funcionalidad para buscar contraseñas guardadas en el archivo xlsx
     def LookFor(self, domain, counter):
         # Determinar un limite de busqueda en el libro con counter
         for i in range(0, counter):
