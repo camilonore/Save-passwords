@@ -172,7 +172,7 @@ def decrypt(text_to_decrypt: str, is_seed: bool = False) -> str:
 ###########################################################################
 
 
-book = 'Python\Tkinter\Password.xlsx'
+book = 'Password.xlsx'
 
 
 class Functions:
