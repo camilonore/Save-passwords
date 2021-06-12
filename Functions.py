@@ -199,7 +199,7 @@ class Functions:
         elif self.function == 'privatekey':
             self.privateKeyFunct()
 
-    # Metodo comprobacion de asignacion de la llave privada
+    # Private key assignment verification method
     def checkprivatetime(self):
         if self.ws['F1'].value == 2:
             self.counter += 1
@@ -209,14 +209,14 @@ class Functions:
             self.wb.save(book)
             return True
 
-    # Metodo llave privada
+    # Private key method
     def privateKeyFunct(self):
         # Guardar el valor de la llave privada
         self.ws['F2'].value = encrypt(self.privateKey)
         # Guardar el libro
         self.wb.save(book)
 
-    # Funcionalidad para añadir una contraseña
+    # Functionality to add a password
     def AddData(self):
         # Asign values
         self.ws['A'+str(self.counter)].value = self.domain
@@ -229,47 +229,46 @@ class Functions:
         # Save the book
         self.wb.save(book)
 
-    # Funcionalidad para borra contraseña
+    # Functionality to delete password
     def DeleteData(self):
-        # Ejecutar el metodo LookFor para buscar la posicion del dominio
+        # Execute the LookFor method to find the position of the domain
         DomainPositioin = self.LookFor(self.domain, self.counter)
-        # Borrando los datos
+        # Deleting the data
         self.ws.delete_rows(DomainPositioin)
         # Save the book
         self.wb.save(book)
 
-    # Funcionalidad para conocer una contraseña
+    # Functionality to know a password
     def KnowPassword(self, enckey):
-        # Ejecutar el metodo LookFor para buscar la posicion de la contraseña
+        # Execute the LookFor method to find the position of the password
         PasswordPosition = 'C'+str(self.LookFor(self.domain, self.counter))
-        # Encontrar el valor de la contraseña
+        # Find the password value
         PasswordValue = self.ws[PasswordPosition].value
-        # Verificacion de la contraseña
-        # comprbar la llave privada
+        # Check private key
         if enckey == decrypt(self.ws['F2'].value):
             PasswordValue = decrypt(PasswordValue)
             return PasswordValue
         else:
             return 'Wrong private key!!'
 
-    # Funcionalidad para cambiar una contraseña
+    # Functionality to change a password
     def ChangePass(self, domain, newpassword):
-        # Ejecutar el metodo LookFor para buscar la posicion de la contraseña
+        # Execute the LookFor method to find the position of the password
         PasswordPosition = 'C'+str(self.LookFor(domain, self.counter))
-        # Asignando el nuevo valor a la contraseña
+        # Assigning the new value to the password
         self.ws[PasswordPosition] = encrypt(newpassword)
         # Save the book
         self.wb.save(book)
 
-    # Funcionalidad para buscar contraseñas guardadas en el archivo xlsx
+    # Functionality to search for passwords saved in xlsx file
     def LookFor(self, domain, counter):
-        # Determinar un limite de busqueda en el libro con counter
+        # Determine a search limit in the book with counter
         for i in range(0, counter):
             df = pd.read_excel(
                 book, "Sheet")
-            # Buscar si el nombre en la posicion es igual al dominio ingresado
+            # Find if the name in the position is equal to the domain entered
             if df.iloc[i, 0] == domain:
-                # Devolver la posicion en la que el dominio se encuentra
+                # Return the position where the domain is located
                 return (i+2)
 
 

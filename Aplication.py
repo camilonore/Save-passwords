@@ -16,7 +16,7 @@ class Application(Frame):
         else:
             self.createMain()
 
-# Interfaz llave privada
+    # Private key interface
     def privateKeyFrame(self):
         self.privatetime += 1
         fr1 = Frame(self, bg=bg_color)
@@ -28,7 +28,7 @@ class Application(Frame):
         self.privatekeyMain.pack(padx=80, pady=5, ipadx=80, ipady=5)
         self.buttons(fr1, 180, 'privatekey')
 
-# Interfaz principal
+    # Main interface
     def createMain(self):
         fr1 = Frame(self, bg=bg_color)
         fr1.place(x=45, y=50)
@@ -45,7 +45,7 @@ class Application(Frame):
         Button(fr1, text='Quit', fg=fg_color, bg=bg_color,
                          command=self.master.destroy, height=2).pack(ipadx=75, pady=55)
 
-# Interfaz para añadir nueva contraseña
+    # Interface to add new password
     def addFunction(self, function):
         fr1 = Frame(self, bg=bg_color)
         fr1.place(x=-10, y=50)
@@ -68,7 +68,7 @@ class Application(Frame):
         self.buttons(fr1, 50)
         self.function = function
 
-# Interfaz para conocer una contraseña
+    # Interface to know a password
     def knowPassword(self, function):
         def doneButtonKnow():
             domain = self.domain.get()
@@ -109,7 +109,7 @@ class Application(Frame):
                          command=self.master.destroy, fg=fg_color, bg=bg_color)
         quitbtn.pack(pady=80, ipadx=70)
 
-# Funcionalidad del boton cambiar contraseña
+    # Functionality of the change password button
     def changeButton(self, function):
         def doneButtonDelete():
             Functions(self.function, self.domain.get(),
@@ -139,7 +139,7 @@ class Application(Frame):
         donebtn.pack(padx=80, pady=5, ipadx=60, ipady=5)
         self.buttons(fr1, 95, 'doneButtonDelete')
 
-# Interfaz para eliminar una contraseña
+    # Interface to remove a password
     def deleteFunction(self, function):
         fr1 = Frame(self, bg=bg_color)
         fr1.place(x=-10, y=50)
@@ -152,9 +152,7 @@ class Application(Frame):
         self.function = function
         self.buttons(fr1)
 
-
-# Funcionalidad del boton completar
-
+    # Done button functionality
 
     def doneButton(self, function):
         if function == 'add':
@@ -178,7 +176,7 @@ class Application(Frame):
             self.domain.delete(0, 'end')
             self.successFrame()
 
-# Metodo para la creacion de botones
+    # Method for creating buttons
     def buttons(self, frame, pady=175, name=None):
         if name == None:
             donebtn = Button(frame, text='Done!',
@@ -212,7 +210,7 @@ class Application(Frame):
                              command=self.master.destroy, fg=fg_color, bg=bg_color)
             quitbtn.pack(pady=pady, ipadx=70)
 
-# frame de accion realizada satisfactoriamente
+# Frame of action performed satisfactorily
     def successFrame(self):
         fr1 = Frame(self, bg=bg_color)
         fr1.place(x=0, y=332)
