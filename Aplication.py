@@ -141,6 +141,11 @@ class Application(Frame):
 
     # Interface to remove a password
     def deleteFunction(self, function):
+        def delete():
+            domain = self.domain.get()
+            Functions(self.function, domain)
+            self.domain.delete(0, 'end')
+            self.successFrame()
         fr1 = Frame(self, bg=bg_color)
         fr1.place(x=-10, y=50)
         lbl1 = Label(fr1, text='Write the domain name',
@@ -150,7 +155,10 @@ class Application(Frame):
                             insertbackground=fg_color)
         self.domain.pack(padx=80, pady=5, ipadx=80, ipady=5)
         self.function = function
-        self.buttons(fr1)
+        donebtn = Button(fr1, text='Done!',
+                         command=delete, fg=fg_color, bg=bg_color)
+        donebtn.pack(padx=80, pady=5, ipadx=60, ipady=5)
+        self.buttons(fr1,95,"doneButtonDelete")
 
     # Done button functionality
 
@@ -171,10 +179,11 @@ class Application(Frame):
             self.createMain()
 
         else:
-            domain = self.domain.get()
-            Functions(self.function, domain)
-            self.domain.delete(0, 'end')
-            self.successFrame()
+            pass
+            # domain = self.domain.get()
+            # Functions(self.function, domain)
+            # self.domain.delete(0, 'end')
+            # self.successFrame()
 
     # Method for creating buttons
     def buttons(self, frame, pady=175, name=None):
@@ -201,7 +210,7 @@ class Application(Frame):
             returnbtn.pack(padx=80, pady=20, ipadx=55, ipady=5)
             quitbtn = Button(frame, text='Quit',
                              command=self.master.destroy, fg=fg_color, bg=bg_color)
-            quitbtn.pack(pady=pady, ipadx=70)
+            quitbtn.pack(pady=180, ipadx=70)
         elif name == 'privatekey':
             donebtn = Button(frame, text='Done!',
                              command=lambda: self.doneButton(name), fg=fg_color, bg=bg_color)
@@ -214,7 +223,7 @@ class Application(Frame):
     def successFrame(self):
         fr1 = Frame(self, bg=bg_color)
         fr1.place(x=0, y=332)
-        lbl1 = Label(fr1, text='SUCCESSFULLY',
+        lbl1 = Label(fr1, text="SUCCESSFULLY",
                      bg=bg_color, fg='#40D044')
         lbl1.pack(padx=155, pady=20, ipadx=5)
 
